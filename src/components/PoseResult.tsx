@@ -2,15 +2,27 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress"; 
 
 export type PoseType = "Stand" | "Sit" | "Kneel" | "Sleep";
 
 interface PoseResultProps {
   humanPresent: boolean | null;
   pose: PoseType | null;
+  // Add optional confidence values for each pose type
+  poseConfidence?: {
+    Stand?: number;
+    Sit?: number;
+    Kneel?: number;
+    Sleep?: number;
+  };
 }
 
-const PoseResult: React.FC<PoseResultProps> = ({ humanPresent, pose }) => {
+const PoseResult: React.FC<PoseResultProps> = ({ 
+  humanPresent, 
+  pose, 
+  poseConfidence = {} 
+}) => {
   const getPoseColor = (pose: PoseType | null): string => {
     switch (pose) {
       case "Stand":
@@ -25,6 +37,19 @@ const PoseResult: React.FC<PoseResultProps> = ({ humanPresent, pose }) => {
         return "bg-gray-600 hover:bg-gray-700";
     }
   };
+
+  const getPoseColorVariable = (pose: PoseType): string => {
+    switch (pose) {
+      case "Stand": return "hsl(var(--pose-stand))";
+      case "Sit": return "hsl(var(--pose-sit))";
+      case "Kneel": return "hsl(var(--pose-kneel))";
+      case "Sleep": return "hsl(var(--pose-sleep))";
+      default: return "hsl(var(--muted))";
+    }
+  };
+
+  // Available pose types in order
+  const poseTypes: PoseType[] = ["Stand", "Sit", "Kneel", "Sleep"];
 
   return (
     <Card className="p-6 shadow-md h-full">
@@ -63,6 +88,30 @@ const PoseResult: React.FC<PoseResultProps> = ({ humanPresent, pose }) => {
             )}
           </div>
         </div>
+
+        {/* Add confidence levels section if available */}
+        {Object.keys(poseConfidence).length > 0 && (
+          <div className="mt-6">
+            <h3 className="text-sm font-medium text-muted-foreground mb-3">Pose Confidence</h3>
+            <div className="space-y-3">
+              {poseTypes.map((poseType) => (
+                <div key={poseType} className="space-y-1">
+                  <div className="flex justify-between text-xs">
+                    <span>{poseType}</span>
+                    <span>{`${Math.round((poseConfidence[poseType] || 0) * 100)}%`}</span>
+                  </div>
+                  <Progress 
+                    value={(poseConfidence[poseType] || 0) * 100} 
+                    className="h-2"
+                    style={{ 
+                      '--progress-background': getPoseColorVariable(poseType)
+                    } as React.CSSProperties} 
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </Card>
   );
