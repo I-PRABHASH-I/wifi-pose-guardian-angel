@@ -52,6 +52,18 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				success: {
+					DEFAULT: '#10b981',
+					foreground: '#ffffff'
+				},
+				info: {
+					DEFAULT: '#3b82f6',
+					foreground: '#ffffff'
+				},
+				warning: {
+					DEFAULT: '#f59e0b',
+					foreground: '#ffffff'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -84,11 +96,39 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+        'pulse-gentle': {
+          '0%, 100%': { 
+            opacity: 1,
+            transform: 'scale(1)'
+          },
+          '50%': { 
+            opacity: 0.85,
+            transform: 'scale(0.98)'
+          },
+        },
+        'fade-up': {
+          '0%': { 
+            opacity: 0,
+            transform: 'translateY(10px)'
+          },
+          '100%': { 
+            opacity: 1,
+            transform: 'translateY(0)'
+          },
+        },
+        'skeleton-fade': {
+          '0%': { opacity: 0.5 },
+          '50%': { opacity: 1 },
+          '100%': { opacity: 0.5 },
+        }
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+        'pulse-gentle': 'pulse-gentle 3s ease-in-out infinite',
+        'fade-up': 'fade-up 0.4s ease-out',
+        'skeleton-fade': 'skeleton-fade 2s infinite ease-in-out'
 			}
 		}
 	},
