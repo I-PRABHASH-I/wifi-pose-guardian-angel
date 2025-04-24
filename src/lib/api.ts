@@ -1,4 +1,3 @@
-
 import { PoseType } from "@/components/PoseResult";
 
 interface Point {
@@ -12,6 +11,12 @@ interface PredictionResult {
   keypoints: Point[];
 }
 
+// Configuration for model path
+const MODEL_CONFIG = {
+  modelPath: 'backend/models/pose_lstm.pth',  // Path to your trained LSTM model
+  csvPath: 'backend/data'  // Path for CSV files
+};
+
 // This is a mock API function that would normally send the CSV to a Flask backend
 export async function predictFromCSV(file: File): Promise<PredictionResult> {
   // In a real implementation, this would post to the Flask API:
@@ -20,6 +25,9 @@ export async function predictFromCSV(file: File): Promise<PredictionResult> {
   // const response = await fetch('http://localhost:5000/infer', {
   //   method: 'POST',
   //   body: formData,
+  //   headers: {
+  //     'Model-Path': MODEL_CONFIG.modelPath,
+  //   }
   // });
   // return await response.json();
   
