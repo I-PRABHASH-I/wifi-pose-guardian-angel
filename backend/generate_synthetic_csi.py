@@ -73,9 +73,13 @@ def generate_synthetic_csi(num_samples=1000):
     df['presence'] = all_presence
     df['pose'] = all_poses
     
+    # Shuffle the dataset to avoid sequential patterns
+    df = df.sample(frac=1, random_state=42).reset_index(drop=True)
+    
     # Save to CSV
     df.to_csv('dataset.csv', index=False)
     print(f"Generated {num_samples} synthetic CSI samples and saved to dataset.csv")
+    print(f"Dataset has been shuffled to avoid sequential patterns")
     
     # Print some statistics
     print("\nDataset Statistics:")
