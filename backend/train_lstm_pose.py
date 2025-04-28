@@ -1,4 +1,3 @@
-
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
@@ -20,9 +19,14 @@ class LSTM_Model(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def forward(self, x):
+        # Check if input is unbatched (2D) and add batch dimension if needed
+        if x.dim() == 2:
+            x = x.unsqueeze(0)  # Add batch dimension [1, seq_len, features]
+            
         # Initialize hidden state with zeros
-        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
-        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(x.device)
+        batch_size = x.size(0)
+        h0 = torch.zeros(self.num_layers, batch_size, self.hidden_size).to(x.device)
+        c0 = torch.zeros(self.num_layers, batch_size, self.hidden_size).to(x.device)
         
         # Forward propagate LSTM
         out, _ = self.lstm(x, (h0, c0))
@@ -174,4 +178,3 @@ def train_model():
 
 if __name__ == "__main__":
     train_model()
-
