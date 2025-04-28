@@ -42,6 +42,7 @@ class LSTM_Model(nn.Module):
 class CSIDataset(Dataset):
     def __init__(self, csv_file):
         data = pd.read_csv(csv_file)
+        # Updated to use 'subcarrier_X' columns instead of 'csi_X'
         self.csi_data = torch.FloatTensor(data.iloc[:, :-2].values)  # All columns except last two
         self.presence = torch.FloatTensor(data.iloc[:, -2].values)   # Second-to-last column
         self.pose = torch.LongTensor(data.iloc[:, -1].values)       # Last column
@@ -57,7 +58,7 @@ def train_model():
     torch.manual_seed(42)
     
     # Hyperparameters
-    input_size = 30  # CSI data dimensions
+    input_size = 30  # CSI data dimensions (number of subcarriers)
     hidden_size = 64
     num_layers = 2
     num_classes = 4  # Number of pose classes
