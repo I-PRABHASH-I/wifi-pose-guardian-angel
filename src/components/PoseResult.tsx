@@ -89,7 +89,7 @@ const PoseResult: React.FC<PoseResultProps> = ({
           </div>
         </div>
 
-        {/* Add confidence levels section if available */}
+        {/* Add confidence levels section */}
         {Object.keys(poseConfidence).length > 0 && (
           <div className="mt-6">
             <h3 className="text-sm font-medium text-muted-foreground mb-3">Pose Confidence</h3>

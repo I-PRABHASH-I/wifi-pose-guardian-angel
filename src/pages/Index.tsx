@@ -17,6 +17,7 @@ const Index = () => {
   const [humanPresent, setHumanPresent] = useState<boolean | null>(null);
   const [pose, setPose] = useState<PoseType | null>(null);
   const [joints, setJoints] = useState<Point[] | null>(null);
+  const [confidence, setConfidence] = useState<Record<PoseType, number>>({} as Record<PoseType, number>);
 
   const handleFileUpload = async (file: File) => {
     if (!file.name.toLowerCase().endsWith('.csv')) {
@@ -31,13 +32,18 @@ const Index = () => {
     setIsProcessing(true);
     
     try {
-      // Call the API (currently mocked in api.ts)
+      // Call the API (now connects to real backend)
       const result = await predictFromCSV(file);
       
       // Update state with results
       setHumanPresent(result.human_present);
       setPose(result.pose_class);
       setJoints(result.keypoints);
+      
+      // Update confidence values if available
+      if (result.confidence) {
+        setConfidence(result.confidence as Record<PoseType, number>);
+      }
       
       toast({
         title: "Prediction complete",
@@ -72,7 +78,11 @@ const Index = () => {
           </div>
           
           <div className="md:col-span-1 animate-fade-up" style={{ animationDelay: "0.1s" }}>
-            <PoseResult humanPresent={humanPresent} pose={pose} />
+            <PoseResult 
+              humanPresent={humanPresent} 
+              pose={pose} 
+              poseConfidence={confidence}
+            />
           </div>
           
           <div className="md:col-span-2 animate-fade-up" style={{ animationDelay: "0.2s" }}>
