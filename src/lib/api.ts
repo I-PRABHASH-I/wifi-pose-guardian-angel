@@ -18,33 +18,71 @@ interface PredictionResult {
   };
 }
 
-// Configuration for API endpoint
-const API_CONFIG = {
-  baseUrl: 'http://localhost:5000',  // Flask server URL
-};
+// Mock data for demo purposes
+const MOCK_POSES: PoseType[] = ['Stand', 'Sit', 'Kneel', 'Sleep'];
 
-// Function to send the CSV to the Flask backend for prediction
-export async function predictFromCSV(file: File): Promise<PredictionResult> {
-  try {
-    // Create form data to send the file
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    // Send request to the Flask API
-    const response = await fetch(`${API_CONFIG.baseUrl}/infer`, {
-      method: 'POST',
-      body: formData,
+// Generate mock keypoints for visualization
+function generateMockKeypoints(pose: PoseType): Point[] {
+  const keypoints: Point[] = [];
+  const basePositions = {
+    Stand: { x: 300, y: 150 },
+    Sit: { x: 300, y: 200 },
+    Kneel: { x: 300, y: 180 },
+    Sleep: { x: 300, y: 250 }
+  };
+  
+  const base = basePositions[pose];
+  
+  // Generate 17 keypoints (standard human pose estimation)
+  for (let i = 0; i < 17; i++) {
+    keypoints.push({
+      x: base.x + (Math.random() - 0.5) * 100,
+      y: base.y + (Math.random() - 0.5) * 150
     });
-    
-    if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
-    }
-    
-    // Parse and return the prediction result
-    const result = await response.json();
-    return result as PredictionResult;
-  } catch (error) {
-    console.error('Error predicting from CSV:', error);
-    throw error;
   }
+  
+  return keypoints;
+}
+
+// Function to simulate CSV prediction with mock data
+export async function predictFromCSV(file: File): Promise<PredictionResult> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  
+  // Generate random prediction
+  const randomPose = MOCK_POSES[Math.floor(Math.random() * MOCK_POSES.length)];
+  const humanPresent = Math.random() > 0.1; // 90% chance of human being present
+  
+  return {
+    human_present: humanPresent,
+    pose_class: randomPose,
+    keypoints: generateMockKeypoints(randomPose),
+    confidence: {
+      Stand: Math.random() * 0.4 + (randomPose === 'Stand' ? 0.6 : 0.1),
+      Sit: Math.random() * 0.4 + (randomPose === 'Sit' ? 0.6 : 0.1),
+      Kneel: Math.random() * 0.4 + (randomPose === 'Kneel' ? 0.6 : 0.1),
+      Sleep: Math.random() * 0.4 + (randomPose === 'Sleep' ? 0.6 : 0.1)
+    }
+  };
+}
+
+// Function to generate sample data without file upload
+export async function generateSampleData(): Promise<PredictionResult> {
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  
+  const poses: PoseType[] = ['Stand', 'Sit', 'Kneel', 'Sleep'];
+  const selectedPose = poses[Math.floor(Math.random() * poses.length)];
+  
+  return {
+    human_present: true,
+    pose_class: selectedPose,
+    keypoints: generateMockKeypoints(selectedPose),
+    confidence: {
+      Stand: Math.random() * 0.3 + (selectedPose === 'Stand' ? 0.7 : 0.1),
+      Sit: Math.random() * 0.3 + (selectedPose === 'Sit' ? 0.7 : 0.1),
+      Kneel: Math.random() * 0.3 + (selectedPose === 'Kneel' ? 0.7 : 0.1),
+      Sleep: Math.random() * 0.3 + (selectedPose === 'Sleep' ? 0.7 : 0.1)
+    }
+  };
 }

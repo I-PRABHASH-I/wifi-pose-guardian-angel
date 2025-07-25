@@ -6,10 +6,11 @@ import { ArrowRight } from "lucide-react";
 
 interface FileUploadProps {
   onFileUpload: (file: File) => void;
+  onSampleData: () => void;
   isProcessing: boolean;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isProcessing }) => {
+const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, onSampleData, isProcessing }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +65,20 @@ const FileUpload: React.FC<FileUploadProps> = ({ onFileUpload, isProcessing }) =
               {selectedFile.name} ({(selectedFile.size / 1024).toFixed(2)} KB)
             </div>
           )}
+          <Button 
+            onClick={onSampleData}
+            disabled={isProcessing} 
+            variant="outline"
+          >
+            {isProcessing ? (
+              <span className="flex items-center gap-2">
+                Loading
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+              </span>
+            ) : (
+              "Sample Data"
+            )}
+          </Button>
           <Button 
             onClick={handleUpload} 
             disabled={!selectedFile || isProcessing} 

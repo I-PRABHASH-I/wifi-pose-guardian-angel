@@ -4,7 +4,7 @@ import { useToast } from "@/components/ui/use-toast";
 import FileUpload from "@/components/FileUpload";
 import PoseResult, { PoseType } from "@/components/PoseResult";
 import SkeletonVisualization from "@/components/SkeletonVisualization";
-import { predictFromCSV } from "@/lib/api";
+import { predictFromCSV, generateSampleData } from "@/lib/api";
 
 interface Point {
   x: number;
@@ -32,7 +32,7 @@ const Index = () => {
     setIsProcessing(true);
     
     try {
-      // Call the API (now connects to real backend)
+      // Call the mock API
       const result = await predictFromCSV(file);
       
       // Update state with results
@@ -62,6 +62,40 @@ const Index = () => {
     }
   };
 
+  const handleSampleData = async () => {
+    setIsProcessing(true);
+    
+    try {
+      // Generate sample data using mock API
+      const result = await generateSampleData();
+      
+      // Update state with results
+      setHumanPresent(result.human_present);
+      setPose(result.pose_class);
+      setJoints(result.keypoints);
+      
+      // Update confidence values
+      if (result.confidence) {
+        setConfidence(result.confidence as Record<PoseType, number>);
+      }
+      
+      toast({
+        title: "Sample data loaded",
+        description: `Generated sample pose: ${result.pose_class}`,
+        variant: "default",
+      });
+    } catch (error) {
+      console.error("Sample data error:", error);
+      toast({
+        title: "Sample data failed",
+        description: "An error occurred while generating sample data.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="py-6 border-b border-border">
@@ -74,7 +108,11 @@ const Index = () => {
       <main className="container py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-3 animate-fade-up">
-            <FileUpload onFileUpload={handleFileUpload} isProcessing={isProcessing} />
+            <FileUpload 
+              onFileUpload={handleFileUpload} 
+              onSampleData={handleSampleData}
+              isProcessing={isProcessing} 
+            />
           </div>
           
           <div className="md:col-span-1 animate-fade-up" style={{ animationDelay: "0.1s" }}>
