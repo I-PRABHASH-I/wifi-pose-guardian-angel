@@ -21,27 +21,105 @@ interface PredictionResult {
 // Mock data for demo purposes
 const MOCK_POSES: PoseType[] = ['Stand', 'Sit', 'Kneel', 'Sleep'];
 
-// Generate mock keypoints for visualization
+// Generate realistic mock keypoints based on pose type
 function generateMockKeypoints(pose: PoseType): Point[] {
-  const keypoints: Point[] = [];
-  const basePositions = {
-    Stand: { x: 300, y: 150 },
-    Sit: { x: 300, y: 200 },
-    Kneel: { x: 300, y: 180 },
-    Sleep: { x: 300, y: 250 }
-  };
-  
-  const base = basePositions[pose];
-  
-  // Generate 17 keypoints (standard human pose estimation)
-  for (let i = 0; i < 17; i++) {
-    keypoints.push({
-      x: base.x + (Math.random() - 0.5) * 100,
-      y: base.y + (Math.random() - 0.5) * 150
-    });
+  switch (pose) {
+    case "Stand":
+      return [
+        { x: 0.5, y: 0.1 },  // Head
+        { x: 0.5, y: 0.2 },  // Neck
+        { x: 0.5, y: 0.3 },  // Spine
+        { x: 0.5, y: 0.45 }, // Pelvis
+        { x: 0.5, y: 0.5 },  // Tailbone
+        { x: 0.6, y: 0.2 },  // Right shoulder
+        { x: 0.65, y: 0.35 }, // Right elbow
+        { x: 0.4, y: 0.2 },  // Left shoulder
+        { x: 0.35, y: 0.35 }, // Left elbow
+        { x: 0.7, y: 0.5 },  // Right hand
+        { x: 0.7, y: 0.5 },  // Right fingers
+        { x: 0.3, y: 0.5 },  // Left hand
+        { x: 0.3, y: 0.5 },  // Left fingers
+        { x: 0.55, y: 0.6 }, // Right hip
+        { x: 0.55, y: 0.75 }, // Right knee
+        { x: 0.55, y: 0.9 }, // Right ankle
+        { x: 0.45, y: 0.6 }, // Left hip
+        { x: 0.45, y: 0.75 }, // Left knee
+        { x: 0.45, y: 0.9 }  // Left ankle
+      ];
+      
+    case "Sit":
+      return [
+        { x: 0.5, y: 0.2 },  // Head
+        { x: 0.5, y: 0.3 },  // Neck
+        { x: 0.5, y: 0.4 },  // Spine
+        { x: 0.5, y: 0.5 },  // Pelvis
+        { x: 0.5, y: 0.5 },  // Tailbone
+        { x: 0.6, y: 0.3 },  // Right shoulder
+        { x: 0.65, y: 0.4 }, // Right elbow
+        { x: 0.4, y: 0.3 },  // Left shoulder
+        { x: 0.35, y: 0.4 }, // Left elbow
+        { x: 0.7, y: 0.5 },  // Right hand
+        { x: 0.7, y: 0.5 },  // Right fingers
+        { x: 0.3, y: 0.5 },  // Left hand
+        { x: 0.3, y: 0.5 },  // Left fingers
+        { x: 0.55, y: 0.5 }, // Right hip
+        { x: 0.6, y: 0.7 },  // Right knee
+        { x: 0.5, y: 0.9 },  // Right ankle
+        { x: 0.45, y: 0.5 }, // Left hip
+        { x: 0.4, y: 0.7 },  // Left knee
+        { x: 0.5, y: 0.9 }   // Left ankle
+      ];
+      
+    case "Kneel":
+      return [
+        { x: 0.5, y: 0.2 },  // Head
+        { x: 0.5, y: 0.3 },  // Neck
+        { x: 0.5, y: 0.4 },  // Spine
+        { x: 0.5, y: 0.5 },  // Pelvis
+        { x: 0.5, y: 0.55 }, // Tailbone
+        { x: 0.6, y: 0.3 },  // Right shoulder
+        { x: 0.7, y: 0.4 },  // Right elbow
+        { x: 0.4, y: 0.3 },  // Left shoulder
+        { x: 0.3, y: 0.4 },  // Left elbow
+        { x: 0.75, y: 0.5 }, // Right hand
+        { x: 0.8, y: 0.5 },  // Right fingers
+        { x: 0.25, y: 0.5 }, // Left hand
+        { x: 0.2, y: 0.5 },  // Left fingers
+        { x: 0.55, y: 0.55 }, // Right hip
+        { x: 0.55, y: 0.75 }, // Right knee
+        { x: 0.7, y: 0.9 },  // Right ankle
+        { x: 0.45, y: 0.55 }, // Left hip
+        { x: 0.45, y: 0.75 }, // Left knee
+        { x: 0.3, y: 0.9 }   // Left ankle
+      ];
+      
+    case "Sleep":
+      return [
+        { x: 0.1, y: 0.5 },  // Head
+        { x: 0.2, y: 0.5 },  // Neck
+        { x: 0.4, y: 0.5 },  // Spine
+        { x: 0.6, y: 0.5 },  // Pelvis
+        { x: 0.7, y: 0.5 },  // Tailbone
+        { x: 0.2, y: 0.4 },  // Right shoulder
+        { x: 0.3, y: 0.35 }, // Right elbow
+        { x: 0.2, y: 0.6 },  // Left shoulder
+        { x: 0.3, y: 0.65 }, // Left elbow
+        { x: 0.4, y: 0.3 },  // Right hand
+        { x: 0.45, y: 0.25 }, // Right fingers
+        { x: 0.4, y: 0.7 },  // Left hand
+        { x: 0.45, y: 0.75 }, // Left fingers
+        { x: 0.6, y: 0.45 }, // Right hip
+        { x: 0.75, y: 0.4 }, // Right knee
+        { x: 0.9, y: 0.4 },  // Right ankle
+        { x: 0.6, y: 0.55 }, // Left hip
+        { x: 0.75, y: 0.6 }, // Left knee
+        { x: 0.9, y: 0.6 }   // Left ankle
+      ];
+      
+    default:
+      // Default standing pose
+      return Array(19).fill({ x: 0.5, y: 0.5 });
   }
-  
-  return keypoints;
 }
 
 // Function to simulate CSV prediction with mock data
