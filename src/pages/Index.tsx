@@ -1,106 +1,96 @@
-
 import React, { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import FileUpload from "@/components/FileUpload";
 import PoseResult, { PoseType } from "@/components/PoseResult";
 import SkeletonVisualization from "@/components/SkeletonVisualization";
 import { predictFromCSV, generateSampleData } from "@/lib/api";
-
 interface Point {
   x: number;
   y: number;
 }
-
 const Index = () => {
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
   const [humanPresent, setHumanPresent] = useState<boolean | null>(null);
   const [pose, setPose] = useState<PoseType | null>(null);
   const [joints, setJoints] = useState<Point[] | null>(null);
   const [confidence, setConfidence] = useState<Record<PoseType, number>>({} as Record<PoseType, number>);
-
   const handleFileUpload = async (file: File) => {
     if (!file.name.toLowerCase().endsWith('.csv')) {
       toast({
         title: "Invalid file",
         description: "Please upload a CSV file.",
-        variant: "destructive",
+        variant: "destructive"
       });
       return;
     }
-
     setIsProcessing(true);
-    
     try {
       // Call the mock API
       const result = await predictFromCSV(file);
-      
+
       // Update state with results
       setHumanPresent(result.human_present);
       setPose(result.pose_class);
       setJoints(result.keypoints);
-      
+
       // Update confidence values if available
       if (result.confidence) {
         setConfidence(result.confidence as Record<PoseType, number>);
       }
-      
       toast({
         title: "Prediction complete",
         description: `Detected pose: ${result.pose_class}`,
-        variant: "default",
+        variant: "default"
       });
     } catch (error) {
       console.error("Prediction error:", error);
       toast({
         title: "Prediction failed",
         description: "An error occurred while processing the file.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsProcessing(false);
     }
   };
-
   const handleSampleData = async () => {
     setIsProcessing(true);
-    
     try {
       // Generate sample data using mock API
       const result = await generateSampleData();
-      
+
       // Update state with results
       setHumanPresent(result.human_present);
       setPose(result.pose_class);
       setJoints(result.keypoints);
-      
+
       // Update confidence values
       if (result.confidence) {
         setConfidence(result.confidence as Record<PoseType, number>);
       }
-      
       toast({
         title: "Sample data loaded",
         description: `Generated sample pose: ${result.pose_class}`,
-        variant: "default",
+        variant: "default"
       });
     } catch (error) {
       console.error("Sample data error:", error);
       toast({
         title: "Sample data failed",
         description: "An error occurred while generating sample data.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setIsProcessing(false);
     }
   };
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <header className="py-6 border-b border-border">
         <div className="container">
-          <h1 className="text-3xl font-bold text-primary">WiFi Pose Guardian</h1>
+          <h1 className="text-3xl font-bold text-primary">Human Tracking Using WIFI CSI Data</h1>
           <p className="text-muted-foreground">Privacy-preserving human pose detection through WiFi sensing</p>
         </div>
       </header>
@@ -108,22 +98,18 @@ const Index = () => {
       <main className="container py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-3 animate-fade-up">
-            <FileUpload 
-              onFileUpload={handleFileUpload} 
-              onSampleData={handleSampleData}
-              isProcessing={isProcessing} 
-            />
+            <FileUpload onFileUpload={handleFileUpload} onSampleData={handleSampleData} isProcessing={isProcessing} />
           </div>
           
-          <div className="md:col-span-1 animate-fade-up" style={{ animationDelay: "0.1s" }}>
-            <PoseResult 
-              humanPresent={humanPresent} 
-              pose={pose} 
-              poseConfidence={confidence}
-            />
+          <div className="md:col-span-1 animate-fade-up" style={{
+          animationDelay: "0.1s"
+        }}>
+            <PoseResult humanPresent={humanPresent} pose={pose} poseConfidence={confidence} />
           </div>
           
-          <div className="md:col-span-2 animate-fade-up" style={{ animationDelay: "0.2s" }}>
+          <div className="md:col-span-2 animate-fade-up" style={{
+          animationDelay: "0.2s"
+        }}>
             <SkeletonVisualization joints={joints} pose={pose} />
           </div>
         </div>
@@ -135,8 +121,6 @@ const Index = () => {
           <p className="mt-2">Using Channel State Information (CSI) data for non-invasive detection</p>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
