@@ -54,11 +54,25 @@ npm run dev
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Frontend
+- **Vite** - Build tool
+- **TypeScript** - Type-safe JavaScript
+- **React** - UI framework
+- **shadcn-ui** - Component library built on Radix UI
+- **Tailwind CSS** - Utility-first CSS framework
+
+### Backend
+- **Python** - Backend language
+- **Flask** - Web framework
+- **PyTorch** - Machine learning framework
+- **NumPy/Pandas** - Data processing
+- **Scikit-learn** - ML utilities
+
+### Machine Learning
+- **LSTM Neural Network** - For pose detection using WiFi CSI data
+- **Multi-task Learning** - Human presence detection + pose classification
+
+📚 **For a complete list of all libraries and dependencies, see [LIBRARIES.md](./LIBRARIES.md)**
 
 ## How can I deploy this project?
 
